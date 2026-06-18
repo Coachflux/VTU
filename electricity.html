@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Electricity — BUMI Network</title>
+<link rel="stylesheet" href="design-system.css">
+<style>
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:8px 20px 14px}
+.tb-back{width:40px;height:40px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--n-shadow)}
+.tb-title{font-size:18px;font-weight:800;color:var(--txt);font-family:'Clash Display',sans-serif}
+
+.provider-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:0 16px 20px}
+.provider{background:var(--bg);border-radius:var(--r-md);padding:16px;box-shadow:var(--n-shadow);border:1px solid rgba(255,255,255,.4);cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:10px}
+.provider:active{box-shadow:var(--n-shadow-in);transform:scale(0.97)}
+.provider.sel{box-shadow:0 0 0 2px var(--b5),var(--n-shadow)}
+.prov-logo{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff}
+.prov-name{font-size:12px;font-weight:700;color:var(--txt);text-align:center}
+.prov-sub{font-size:10px;color:var(--txt2);text-align:center}
+
+.ikedc{background:linear-gradient(135deg,#ef4444,#b91c1c)}
+.ekedc{background:linear-gradient(135deg,#22c55e,#15803d)}
+.phedc{background:linear-gradient(135deg,#f59e0b,#d97706)}
+.jed{background:linear-gradient(135deg,#4a5df5,#7c5cfc)}
+.kedco{background:linear-gradient(135deg,#06b6d4,#0891b2)}
+.aedc{background:linear-gradient(135deg,#8b5cf6,#7c3aed)}
+
+.meter-card{margin:0 16px 18px;background:var(--bg);border-radius:var(--r-md);padding:16px;box-shadow:var(--n-shadow);border:1px solid rgba(255,255,255,.4)}
+.meter-card label{font-size:13px;font-weight:800;color:var(--txt);margin-bottom:8px;display:block}
+.meter-row{display:flex;gap:10px}
+.meter-row .n-input{flex:1}
+.verify-btn{padding:14px 20px;background:linear-gradient(135deg,var(--b5),var(--b6));color:#fff;border:none;border-radius:var(--r-sm);font-size:13px;font-weight:800;cursor:pointer;box-shadow:var(--n-shadow-sm);white-space:nowrap}
+.verify-btn:active{box-shadow:var(--n-shadow-in)}
+
+.customer-preview{margin:0 16px 18px;background:linear-gradient(135deg,#dcfce7,#bbf7d0);border-radius:var(--r-md);padding:14px 16px;display:none;align-items:center;gap:12px;border:1px solid #86efac}
+.customer-preview.show{display:flex}
+.cust-av{width:40px;height:40px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:800}
+.cust-info{flex:1}
+.cust-name{font-size:13px;font-weight:700;color:var(--txt)}
+.cust-addr{font-size:11px;color:var(--txt2);margin-top:2px}
+
+.amt-title{font-size:13px;font-weight:800;color:var(--txt);margin:0 20px 10px;font-family:'Clash Display',sans-serif}
+.qamts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 16px 18px}
+.qamt{background:var(--bg);border:1.5px solid var(--border);border-radius:var(--r-sm);padding:14px 4px;text-align:center;font-size:13px;font-weight:700;color:var(--txt);cursor:pointer;transition:all .15s;box-shadow:var(--n-shadow-sm)}
+.qamt.sel,.qamt:hover{border-color:var(--b5);color:var(--b5);background:var(--lightblue);box-shadow:0 0 0 2px var(--b5),var(--n-shadow-sm)}
+
+.pay-btn{margin:0 16px 30px}
+</style>
+</head>
+<body>
+<div class="app-wrap">
+
+<div class="screen active">
+  <div class="sb">
+    <span class="sb-time">9:41</span>
+    <div class="sb-right">
+      <div class="bars"><b></b><b></b><b></b><b></b></div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111827" stroke-width="2"><path d="M1.42 9a16 16 0 0 1 21.16 0M5 12.55a11 11 0 0 1 14.08 0M10.54 16.1a6 6 0 0 1 2.92 0M12 20h.01"/></svg>
+      <svg width="24" height="13" viewBox="0 0 28 14"><rect x="1" y="1" width="22" height="12" rx="3" fill="none" stroke="#111827" stroke-width="1.5"/><rect x="3" y="3" width="16" height="8" rx="1.5" fill="#111827"/><path d="M24 4.5v5a2 2 0 0 0 0-5z" fill="#111827"/></svg>
+    </div>
+  </div>
+  <div class="sc">
+    <div class="topbar">
+      <div class="tb-back" onclick="location.href='home.html'"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111827" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></div>
+      <span class="tb-title">Electricity</span>
+      <div style="width:40px"></div>
+    </div>
+
+    <div class="sh"><span class="sh-title">Select Provider</span></div>
+    <div class="provider-grid">
+      <div class="provider sel" onclick="selProv(this)">
+        <div class="prov-logo ikedc">IKEDC</div>
+        <div class="prov-name">Ikeja Electric</div>
+        <div class="prov-sub">Prepaid / Postpaid</div>
+      </div>
+      <div class="provider" onclick="selProv(this)">
+        <div class="prov-logo ekedc">EKEDC</div>
+        <div class="prov-name">Eko Electric</div>
+        <div class="prov-sub">Prepaid / Postpaid</div>
+      </div>
+      <div class="provider" onclick="selProv(this)">
+        <div class="prov-logo phedc">PHEDC</div>
+        <div class="prov-name">Port Harcourt</div>
+        <div class="prov-sub">Prepaid Only</div>
+      </div>
+      <div class="provider" onclick="selProv(this)">
+        <div class="prov-logo jed">JED</div>
+        <div class="prov-name">Jos Electric</div>
+        <div class="prov-sub">Prepaid / Postpaid</div>
+      </div>
+      <div class="provider" onclick="selProv(this)">
+        <div class="prov-logo kedco">KEDCO</div>
+        <div class="prov-name">Kano Electric</div>
+        <div class="prov-sub">Prepaid Only</div>
+      </div>
+      <div class="provider" onclick="selProv(this)">
+        <div class="prov-logo aedc">AEDC</div>
+        <div class="prov-name">Abuja Electric</div>
+        <div class="prov-sub">Prepaid / Postpaid</div>
+      </div>
+    </div>
+
+    <div class="meter-card">
+      <label>Meter Number</label>
+      <div class="meter-row">
+        <input type="text" class="n-input" placeholder="Enter meter number" value="12345678901">
+        <button class="verify-btn" onclick="document.querySelector('.customer-preview').classList.add('show')">Verify</button>
+      </div>
+    </div>
+
+    <div class="customer-preview">
+      <div class="cust-av">JD</div>
+      <div class="cust-info">
+        <div class="cust-name">John Doe</div>
+        <div class="cust-addr">12 Admiralty Way, Lekki Phase 1, Lagos</div>
+      </div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+
+    <div class="amt-title">Select Amount</div>
+    <div class="qamts">
+      <div class="qamt" onclick="selAmt(this)">₦1,000</div>
+      <div class="qamt sel" onclick="selAmt(this)">₦2,000</div>
+      <div class="qamt" onclick="selAmt(this)">₦3,000</div>
+      <div class="qamt" onclick="selAmt(this)">₦5,000</div>
+      <div class="qamt" onclick="selAmt(this)">₦10,000</div>
+      <div class="qamt" onclick="selAmt(this)">₦20,000</div>
+    </div>
+
+    <div style="margin:0 16px 16px">
+      <label style="font-size:13px;font-weight:800;color:var(--txt);margin-bottom:8px;display:block">Custom Amount</label>
+      <div style="position:relative">
+        <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-weight:800;color:var(--txt2)">₦</span>
+        <input type="number" class="n-input" placeholder="0.00" style="padding-left:32px">
+      </div>
+    </div>
+
+    <button class="btn-primary pay-btn w-full" onclick="this.textContent='Processing...';setTimeout(()=>{this.textContent='✓ Token Generated!';this.style.background='var(--green)'},1500)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      Pay ₦2,000
+    </button>
+  </div>
+
+  <div class="nav">
+    <div class="ni" onclick="location.href='home.html'"><svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><polyline points="9 21 9 12 15 12 15 21"/></svg><span class="ni-lbl">Home</span></div>
+    <div class="ni" onclick="location.href='buy-data.html'"><svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span class="ni-lbl">Buy Data</span></div>
+    <div class="ncb" onclick="location.href='wallet.html'"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg></div>
+    <div class="ni" onclick="location.href='history.html'"><svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><span class="ni-lbl">History</span></div>
+    <div class="ni" onclick="location.href='profile.html'"><svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="ni-lbl">Profile</span></div>
+  </div>
+</div>
+
+<script>
+function selProv(el){
+  el.closest('.provider-grid').querySelectorAll('.provider').forEach(p=>p.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function selAmt(el){
+  el.closest('.qamts').querySelectorAll('.qamt').forEach(a=>a.classList.remove('sel'));
+  el.classList.add('sel');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Admin — BUMI Network</title>
+<link rel="stylesheet" href="design-system.css">
+<style>
+.admin-wrap{background:var(--b1);min-height:100vh}
+.admin-sb{display:flex;align-items:center;gap:12px;padding:14px 20px}
+.admin-sb h1{font-size:18px;font-weight:900;color:#fff;font-family:'Clash Display',sans-serif}
+.back-btn{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.back-btn svg{width:18px;height:18px;stroke:#fff}
+
+/* Metrics */
+.metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:0 16px 16px}
+.metric{background:rgba(255,255,255,.06);border-radius:var(--r-md);padding:16px;border:1px solid rgba(255,255,255,.08)}
+.metric-lbl{font-size:11px;color:rgba(255,255,255,.55);font-weight:600;margin-bottom:6px}
+.metric-val{font-size:22px;font-weight:900;color:#fff;font-family:'Clash Display',sans-serif}
+.metric-change{font-size:11px;font-weight:700;margin-top:4px}
+.metric-change.up{color:var(--green)}
+.metric-change.down{color:var(--red)}
+.metric-bar{height:4px;background:rgba(255,255,255,.1);border-radius:2px;margin-top:8px;overflow:hidden}
+.metric-bar div{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--b5),var(--b6))}
+
+/* Provider Status */
+.prov-status{margin:0 16px 16px;background:rgba(255,255,255,.06);border-radius:var(--r-md);padding:16px;border:1px solid rgba(255,255,255,.08)}
+.ps-title{font-size:13px;font-weight:800;color:#fff;margin-bottom:12px;font-family:'Clash Display',sans-serif}
+.ps-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.ps-row:last-child{border-bottom:none}
+.ps-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}
+.ps-dot.off{background:var(--red);box-shadow:0 0 8px var(--red)}
+.ps-name{flex:1;font-size:12px;font-weight:600;color:rgba(255,255,255,.8)}
+.ps-status{font-size:11px;color:var(--green);font-weight:700}
+.ps-status.off{color:var(--red)}
+
+/* User Table */
+.user-table{margin:0 16px 20px;background:rgba(255,255,255,.06);border-radius:var(--r-md);padding:16px;border:1px solid rgba(255,255,255,.08)}
+.ut-title{font-size:13px;font-weight:800;color:#fff;margin-bottom:12px;font-family:'Clash Display',sans-serif}
+.ut-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.ut-row:last-child{border-bottom:none}
+.ut-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--b5),var(--b6));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff}
+.ut-info{flex:1}
+.ut-name{font-size:12px;font-weight:700;color:#fff}
+.ut-email{font-size:10px;color:rgba(255,255,255,.5)}
+.ut-tier{padding:3px 10px;border-radius:var(--r-full);font-size:9px;font-weight:800}
+.tier-gold{background:linear-gradient(135deg,#fbbf24,#d97706);color:#000}
+.tier-silver{background:linear-gradient(135deg,#94a3b8,#64748b);color:#fff}
+.tier-bronze{background:linear-gradient(135deg,#a8715a,#8b5a3c);color:#fff}
+
+/* Tx Table */
+.tx-table{margin:0 16px 20px;background:rgba(255,255,255,.06);border-radius:var(--r-md);padding:16px;border:1px solid rgba(255,255,255,.08)}
+.tt-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.tt-row:last-child{border-bottom:none}
+.tt-info{flex:1}
+.tt-ttl{font-size:12px;font-weight:700;color:#fff}
+.tt-dt{font-size:10px;color:rgba(255,255,255,.5)}
+.tt-amt{font-size:13px;font-weight:800}
+.tt-amt.cr{color:var(--green)}
+.tt-amt.db{color:var(--red)}
+</style>
+</head>
+<body>
+<div class="app-wrap admin-wrap">
+
+<div class="screen active">
+  <div class="sb" style="padding-bottom:10px">
+    <span class="sb-time" style="color:#fff">9:41</span>
+    <div class="sb-right">
+      <div class="bars"><b style="background:#fff"></b><b style="background:#fff"></b><b style="background:#fff"></b><b style="background:#fff"></b></div>
+    </div>
+  </div>
+  <div class="sc">
+    <div class="admin-sb">
+      <div class="back-btn" onclick="location.href='profile.html'"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></div>
+      <h1>Admin Panel</h1>
+    </div>
+
+    <!-- Revenue Metrics -->
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-lbl">Total Revenue</div>
+        <div class="metric-val">₦2.4M</div>
+        <div class="metric-change up">↑ 24% this month</div>
+        <div class="metric-bar"><div style="width:75%"></div></div>
+      </div>
+      <div class="metric">
+        <div class="metric-lbl">Transactions</div>
+        <div class="metric-val">12,847</div>
+        <div class="metric-change up">↑ 18% this month</div>
+        <div class="metric-bar"><div style="width:60%"></div></div>
+      </div>
+      <div class="metric">
+        <div class="metric-lbl">Active Users</div>
+        <div class="metric-val">3,429</div>
+        <div class="metric-change up">↑ 12% this month</div>
+        <div class="metric-bar"><div style="width:45%"></div></div>
+      </div>
+      <div class="metric">
+        <div class="metric-lbl">Pending Issues</div>
+        <div class="metric-val">23</div>
+        <div class="metric-change down">↑ 5% this week</div>
+        <div class="metric-bar"><div style="width:15%;background:linear-gradient(90deg,var(--red),#dc2626)"></div></div>
+      </div>
+    </div>
+
+    <!-- Provider Status -->
+    <div class="prov-status">
+      <div class="ps-title">Provider Status</div>
+      <div class="ps-row">
+        <div class="ps-dot"></div>
+        <div class="ps-name">MTN Nigeria</div>
+        <div class="ps-status">Online</div>
+      </div>
+      <div class="ps-row">
+        <div class="ps-dot"></div>
+        <div class="ps-name">Airtel Nigeria</div>
+        <div class="ps-status">Online</div>
+      </div>
+      <div class="ps-row">
+        <div class="ps-dot off"></div>
+        <div class="ps-name">IKEDC</div>
+        <div class="ps-status off">Maintenance</div>
+      </div>
+      <div class="ps-row">
+        <div class="ps-dot"></div>
+        <div class="ps-name">Paystack</div>
+        <div class="ps-status">Online</div>
+      </div>
+    </div>
+
+    <!-- User Management -->
+    <div class="user-table">
+      <div class="ut-title">Top Users</div>
+      <div class="ut-row">
+        <div class="ut-av">JD</div>
+        <div class="ut-info"><div class="ut-name">John Doe</div><div class="ut-email">john@example.com</div></div>
+        <span class="ut-tier tier-gold">GOLD</span>
+      </div>
+      <div class="ut-row">
+        <div class="ut-av" style="background:linear-gradient(135deg,var(--green),#16a34a)">AS</div>
+        <div class="ut-info"><div class="ut-name">Alice Smith</div><div class="ut-email">alice@example.com</div></div>
+        <span class="ut-tier tier-silver">SILVER</span>
+      </div>
+      <div class="ut-row">
+        <div class="ut-av" style="background:linear-gradient(135deg,var(--amber),#d97706)">BJ</div>
+        <div class="ut-info"><div class="ut-name">Bob Johnson</div><div class="ut-email">bob@example.com</div></div>
+        <span class="ut-tier tier-bronze">BRONZE</span>
+      </div>
+    </div>
+
+    <!-- Recent Transactions -->
+    <div class="tx-table">
+      <div class="ut-title">Recent Transactions</div>
+      <div class="tt-row">
+        <div class="tt-info"><div class="tt-ttl">Data Purchase — MTN 2GB</div><div class="tt-dt">Today, 10:30 AM • User #1024</div></div>
+        <div class="tt-amt db">-₦400</div>
+      </div>
+      <div class="tt-row">
+        <div class="tt-info"><div class="tt-ttl">Wallet Top-up</div><div class="tt-dt">Today, 08:45 AM • User #1024</div></div>
+        <div class="tt-amt cr">+₦2,000</div>
+      </div>
+      <div class="tt-row">
+        <div class="tt-info"><div class="tt-ttl">Electricity — IKEDC</div><div class="tt-dt">Yesterday, 02:30 PM • User #856</div></div>
+        <div class="tt-amt db">-₦2,000</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

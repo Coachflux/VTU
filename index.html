@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>BUMI Network</title>
+<link rel="stylesheet" href="design-system.css">
+<style>
+/* ── Splash Screen ── */
+#splash{position:fixed;inset:0;background:linear-gradient(160deg,var(--b1) 0%,var(--b3) 40%,var(--b4) 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity .6s var(--ease),transform .6s var(--ease)}
+#splash.fade-out{opacity:0;transform:scale(1.1);pointer-events:none}
+.splash-orb{position:absolute;border-radius:50%;filter:blur(50px);opacity:.4}
+.splash-orb:nth-child(1){width:250px;height:250px;background:var(--b6);top:10%;left:-60px}
+.splash-orb:nth-child(2){width:200px;height:200px;background:var(--b5);bottom:15%;right:-50px}
+.splash-orb:nth-child(3){width:150px;height:150px;background:var(--b7);top:40%;right:10%;opacity:.25}
+
+.splash-logo{width:100px;height:100px;border-radius:28px;background:linear-gradient(135deg,var(--b6),var(--b5));display:flex;align-items:center;justify-content:center;box-shadow:0 20px 60px rgba(100,90,255,.4),0 0 0 1px rgba(255,255,255,.1) inset;position:relative;z-index:2;margin-bottom:28px;animation:bounce-in .8s var(--ease) forwards}
+.splash-logo svg{width:52px;height:52px}
+.splash-logo::after{content:'';position:absolute;inset:-4px;border-radius:32px;border:2px solid rgba(255,255,255,.15);animation:pulse-glow 2s ease-in-out infinite}
+
+.splash-name{font-family:'Clash Display',sans-serif;font-size:32px;font-weight:900;color:#fff;letter-spacing:-.5px;position:relative;z-index:2;text-shadow:0 4px 20px rgba(0,0,0,.2)}
+.splash-tagline{font-size:13px;color:rgba(255,255,255,.65);margin-top:6px;position:relative;z-index:2;font-weight:500}
+.splash-dots{display:flex;gap:6px;margin-top:32px;position:relative;z-index:2}
+.splash-dots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3);animation:dot-pulse 1.4s ease-in-out infinite}
+.splash-dots span:nth-child(2){animation-delay:.2s}
+.splash-dots span:nth-child(3){animation-delay:.4s}
+@keyframes dot-pulse{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
+
+/* ── Auth Gate ── */
+#auth-gate{display:none;flex-direction:column;min-height:100vh;background:var(--bg);position:relative;overflow:hidden}
+#auth-gate.active{display:flex}
+.auth-orb{position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none}
+.auth-orb-1{width:220px;height:220px;background:linear-gradient(135deg,var(--b5),var(--b6));top:-80px;right:-60px;opacity:.2}
+.auth-orb-2{width:180px;height:180px;background:linear-gradient(135deg,var(--b6),var(--b7));bottom:-40px;left:-40px;opacity:.15}
+
+.auth-header{padding:60px 28px 20px;text-align:center;position:relative;z-index:1}
+.auth-logo{width:72px;height:72px;border-radius:22px;background:linear-gradient(135deg,var(--b6),var(--b5));display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:var(--n-shadow)}
+.auth-logo svg{width:38px;height:38px}
+.auth-title{font-family:'Clash Display',sans-serif;font-size:28px;font-weight:900;color:var(--txt);line-height:1.1}
+.auth-sub{font-size:14px;color:var(--txt2);margin-top:8px;font-weight:500}
+
+.auth-body{padding:0 24px 24px;flex:1;position:relative;z-index:1}
+.auth-tabs{display:flex;gap:8px;margin-bottom:24px;padding:4px;background:var(--bg);border-radius:var(--r-full);box-shadow:var(--n-shadow-in)}
+.auth-tab{flex:1;padding:12px;text-align:center;border-radius:var(--r-full);font-size:14px;font-weight:700;color:var(--txt2);cursor:pointer;border:none;background:transparent;transition:all .25s var(--ease);font-family:inherit}
+.auth-tab.on{background:var(--surface);color:var(--b5);box-shadow:var(--n-shadow-sm)}
+
+.auth-form{display:none;flex-direction:column;gap:16px}
+.auth-form.active{display:flex}
+
+.input-wrap{position:relative}
+.input-wrap label{font-size:12px;font-weight:700;color:var(--txt2);margin-bottom:6px;display:block;padding-left:4px}
+.input-wrap .n-input{padding-left:44px}
+.input-icon{position:absolute;left:14px;bottom:14px;color:var(--txt3)}
+.input-icon svg{width:18px;height:18px;stroke:var(--txt3);fill:none;stroke-width:2}
+
+.auth-divider{display:flex;align-items:center;gap:12px;margin:8px 0;color:var(--txt3);font-size:12px;font-weight:600}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.social-row{display:flex;gap:12px}
+.social-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;background:var(--bg);border-radius:var(--r-sm);box-shadow:var(--n-shadow);border:none;cursor:pointer;font-size:13px;font-weight:700;color:var(--txt);transition:all .2s;font-family:inherit}
+.social-btn:active{box-shadow:var(--n-shadow-in)}
+.social-btn svg{width:18px;height:18px}
+
+.auth-footer{text-align:center;padding:0 24px 32px;position:relative;z-index:1}
+.auth-footer p{font-size:13px;color:var(--txt3);font-weight:500}
+.auth-footer a{color:var(--b5);font-weight:700;text-decoration:none}
+
+/* Demo badge */
+.demo-badge{position:fixed;top:12px;right:12px;background:rgba(239,68,68,.1);color:var(--red);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:800;z-index:200;border:1px solid rgba(239,68,68,.2)}
+
+/* Toggle password */
+.pw-toggle{position:absolute;right:14px;bottom:14px;cursor:pointer;color:var(--txt3)}
+.pw-toggle svg{width:18px;height:18px;stroke:var(--txt3);fill:none;stroke-width:2}
+</style>
+</head>
+<body>
+<div class="app-wrap">
+
+<!-- ════════════════════════════════════════════
+     SPLASH SCREEN
+     ════════════════════════════════════════════ -->
+<div id="splash">
+  <div class="splash-orb"></div>
+  <div class="splash-orb"></div>
+  <div class="splash-orb"></div>
+
+  <div class="splash-logo">
+    <svg viewBox="0 0 48 48" fill="none">
+      <defs>
+        <linearGradient id="slg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#fff" stop-opacity=".95"/>
+          <stop offset="100%" stop-color="#c4b5fd" stop-opacity=".8"/>
+        </linearGradient>
+      </defs>
+      <!-- Abstract B shape / network node -->
+      <circle cx="24" cy="14" r="6" fill="url(#slg)"/>
+      <circle cx="14" cy="30" r="5" fill="url(#slg)" opacity=".85"/>
+      <circle cx="34" cy="30" r="5" fill="url(#slg)" opacity=".85"/>
+      <circle cx="24" cy="38" r="4" fill="url(#slg)" opacity=".7"/>
+      <line x1="24" y1="20" x2="14" y2="25" stroke="url(#slg)" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="24" y1="20" x2="34" y2="25" stroke="url(#slg)" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="14" y1="30" x2="24" y2="34" stroke="url(#slg)" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+      <line x1="34" y1="30" x2="24" y2="34" stroke="url(#slg)" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+    </svg>
+  </div>
+  <div class="splash-name">BUMI Network</div>
+  <div class="splash-tagline">Connect. Recharge. Earn.</div>
+  <div class="splash-dots"><span></span><span></span><span></span></div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     AUTH GATE (Login / Sign Up)
+     ════════════════════════════════════════════ -->
+<div id="auth-gate">
+  <div class="demo-badge">DEMO MODE</div>
+  <div class="auth-orb auth-orb-1"></div>
+  <div class="auth-orb auth-orb-2"></div>
+
+  <div class="auth-header">
+    <div class="auth-logo">
+      <svg viewBox="0 0 48 48" fill="none">
+        <circle cx="24" cy="14" r="6" fill="url(#slg)"/>
+        <circle cx="14" cy="30" r="5" fill="url(#slg)" opacity=".85"/>
+        <circle cx="34" cy="30" r="5" fill="url(#slg)" opacity=".85"/>
+        <circle cx="24" cy="38" r="4" fill="url(#slg)" opacity=".7"/>
+        <line x1="24" y1="20" x2="14" y2="25" stroke="url(#slg)" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="24" y1="20" x2="34" y2="25" stroke="url(#slg)" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="14" y1="30" x2="24" y2="34" stroke="url(#slg)" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+        <line x1="34" y1="30" x2="24" y2="34" stroke="url(#slg)" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+      </svg>
+    </div>
+    <h1 class="auth-title">Welcome to<br><span class="text-gradient">BUMI Network</span></h1>
+    <p class="auth-sub">Your all-in-one hub for data, airtime &amp; bills.</p>
+  </div>
+
+  <div class="auth-body">
+    <div class="auth-tabs">
+      <button class="auth-tab on" onclick="switchAuth('login')">Sign In</button>
+      <button class="auth-tab" onclick="switchAuth('signup')">Sign Up</button>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <form class="auth-form active" id="form-login" onsubmit="handleLogin(event)">
+      <div class="input-wrap">
+        <label>Email or Phone</label>
+        <div style="position:relative">
+          <span class="input-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+          <input type="text" class="n-input" placeholder="Enter email or phone" value="demo@bumi.network">
+        </div>
+      </div>
+      <div class="input-wrap">
+        <label>Password</label>
+        <div style="position:relative">
+          <span class="input-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+          <input type="password" class="n-input" placeholder="Enter password" value="password" id="login-pw">
+          <span class="pw-toggle" onclick="togglePw('login-pw',this)"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px">
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;color:var(--txt2)">
+          <input type="checkbox" checked style="accent-color:var(--b5);width:16px;height:16px"> Remember me
+        </label>
+        <a href="#" style="color:var(--b5);font-weight:700;text-decoration:none">Forgot?</a>
+      </div>
+      <button type="submit" class="btn-primary w-full" style="margin-top:4px">Sign In</button>
+    </form>
+
+    <!-- SIGNUP FORM -->
+    <form class="auth-form" id="form-signup" onsubmit="handleSignup(event)">
+      <div class="input-wrap">
+        <label>Full Name</label>
+        <div style="position:relative">
+          <span class="input-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+          <input type="text" class="n-input" placeholder="John Doe">
+        </div>
+      </div>
+      <div class="input-wrap">
+        <label>Email Address</label>
+        <div style="position:relative">
+          <span class="input-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+          <input type="email" class="n-input" placeholder="you@example.com">
+        </div>
+      </div>
+      <div class="input-wrap">
+        <label>Phone Number</label>
+        <div style="position:relative">
+          <span class="input-icon" style="font-size:14px;font-weight:800;color:var(--txt2)">🇳🇬</span>
+          <input type="tel" class="n-input" placeholder="+234 801 234 5678">
+        </div>
+      </div>
+      <div class="input-wrap">
+        <label>Create Password</label>
+        <div style="position:relative">
+          <span class="input-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+          <input type="password" class="n-input" placeholder="Min. 8 characters" id="signup-pw">
+          <span class="pw-toggle" onclick="togglePw('signup-pw',this)"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+        </div>
+      </div>
+      <div class="input-wrap">
+        <label>Referral Code <span style="font-weight:500;color:var(--txt3)">(Optional)</span></label>
+        <div style="position:relative">
+          <span class="input-icon"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
+          <input type="text" class="n-input" placeholder="Enter referral code">
+        </div>
+      </div>
+      <label style="display:flex;align-items:flex-start;gap:8px;font-size:12px;font-weight:600;color:var(--txt2);cursor:pointer">
+        <input type="checkbox" style="accent-color:var(--b5);width:16px;height:16px;margin-top:2px">
+        <span>I agree to the <a href="#" style="color:var(--b5)">Terms</a> and <a href="#" style="color:var(--b5)">Privacy Policy</a></span>
+      </label>
+      <button type="submit" class="btn-primary w-full">Create Account</button>
+    </form>
+
+    <div class="auth-divider">or continue with</div>
+    <div class="social-row">
+      <button class="social-btn">
+        <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Google
+      </button>
+      <button class="social-btn">
+        <svg viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        Facebook
+      </button>
+    </div>
+  </div>
+
+  <div class="auth-footer">
+    <p id="login-footer">Don't have an account? <a href="#" onclick="switchAuth('signup')">Sign Up</a></p>
+    <p id="signup-footer" style="display:none">Already have an account? <a href="#" onclick="switchAuth('login')">Sign In</a></p>
+  </div>
+</div>
+
+</div><!-- .app-wrap -->
+
+<script>
+// Splash → Auth transition
+setTimeout(()=>{
+  document.getElementById('splash').classList.add('fade-out');
+  setTimeout(()=>{
+    document.getElementById('splash').style.display='none';
+    document.getElementById('auth-gate').classList.add('active');
+  },600);
+},2500);
+
+function switchAuth(mode){
+  document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.auth-form').forEach(f=>f.classList.remove('active'));
+  document.getElementById('login-footer').style.display='none';
+  document.getElementById('signup-footer').style.display='none';
+
+  if(mode==='login'){
+    document.querySelectorAll('.auth-tab')[0].classList.add('on');
+    document.getElementById('form-login').classList.add('active');
+    document.getElementById('login-footer').style.display='block';
+  } else {
+    document.querySelectorAll('.auth-tab')[1].classList.add('on');
+    document.getElementById('form-signup').classList.add('active');
+    document.getElementById('signup-footer').style.display='block';
+  }
+}
+
+function togglePw(id,el){
+  const inp=document.getElementById(id);
+  inp.type=inp.type==='password'?'text':'password';
+  el.innerHTML=inp.type==='password'
+    ?'<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
+    :'<svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+}
+
+function handleLogin(e){
+  e.preventDefault();
+  window.location.href='home.html';
+}
+function handleSignup(e){
+  e.preventDefault();
+  window.location.href='home.html';
+}
+</script>
+</body>
+</html>

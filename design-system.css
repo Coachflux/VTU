@@ -1,0 +1,170 @@
+/* ============================================================
+   BUMI Network — Design System
+   ============================================================ */
+
+/* ── Google Fonts ── */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Clash+Display:wght@400;500;600;700;800;900&display=swap');
+
+/* ── CSS Variables ── */
+:root {
+  /* Brand */
+  --b1:#0b0f2e; --b2:#141a4a; --b3:#1e2875; --b4:#2a38c8;
+  --b5:#4a5df5; --b6:#7c5cfc; --b7:#a78bfa;
+  /* Accents */
+  --green:#22c55e; --red:#ef4444; --amber:#f59e0b; --orange:#f97316;
+  /* Text */
+  --txt:#0f172a; --txt2:#475569; --txt3:#94a3b8; --txt4:#cbd5e1;
+  /* Surfaces */
+  --bg:#eef0f8; --surface:#ffffff; --surface2:#f8fafc;
+  --border:#e2e8f0; --lightblue:#eef0ff;
+  /* Neumorphism shadows */
+  --n-shadow: 6px 6px 14px rgba(163,177,198,0.6),
+             -6px -6px 14px rgba(255,255,255,0.8);
+  --n-shadow-in: inset 4px 4px 8px rgba(163,177,198,0.5),
+                 inset -4px -4px 8px rgba(255,255,255,0.9);
+  --n-shadow-sm: 3px 3px 7px rgba(163,177,198,0.5),
+                -3px -3px 7px rgba(255,255,255,0.8);
+  /* Glass */
+  --glass: rgba(255,255,255,0.08);
+  --glass-border: rgba(255,255,255,0.15);
+  /* Radii */
+  --r-sm:12px; --r-md:18px; --r-lg:24px; --r-xl:32px; --r-full:9999px;
+  /* Transitions */
+  --ease: cubic-bezier(0.4,0,0.2,1);
+}
+
+/* ── Reset ── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden}
+h1,h2,h3,h4,h5,h6{font-family:'Clash Display','Plus Jakarta Sans',sans-serif;font-weight:800;line-height:1.15}
+
+/* ── Mobile Container ── */
+.app-wrap{width:100%;max-width:420px;margin:0 auto;min-height:100vh;position:relative;background:var(--bg)}
+
+/* ── Screen System ── */
+.screen{display:none;flex-direction:column;min-height:100vh;position:relative}
+.screen.active{display:flex}
+
+/* ── Scrollable Body ── */
+.sc{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:100px}
+.sc::-webkit-scrollbar{display:none}
+
+/* ── Status Bar ── */
+.sb{display:flex;justify-content:space-between;align-items:center;padding:14px 24px 6px;flex-shrink:0}
+.sb-time{font-size:15px;font-weight:800;color:var(--txt);font-variant-numeric:tabular-nums}
+.sb-right{display:flex;align-items:center;gap:5px}
+.bars{display:flex;align-items:flex-end;gap:2px}
+.bars b{display:block;width:3px;border-radius:1.5px;background:var(--txt)}
+.bars b:nth-child(1){height:4px}
+.bars b:nth-child(2){height:7px}
+.bars b:nth-child(3){height:10px}
+.bars b:nth-child(4){height:13px}
+
+/* ── Bottom Nav ── */
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:var(--surface);display:flex;justify-content:space-around;align-items:center;padding:10px 6px 24px;box-shadow:0 -4px 24px rgba(0,0,0,.08);z-index:100;border-radius:24px 24px 0 0}
+.ni{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;min-width:54px;padding:4px 0;transition:transform .2s var(--ease)}
+.ni:active{transform:scale(0.92)}
+.ni-lbl{font-size:10px;font-weight:600;color:var(--txt3);transition:color .2s}
+.ni.on .ni-lbl{color:var(--b5);font-weight:800}
+.ni svg{width:22px;height:22px;transition:stroke .2s}
+.ni.on svg{stroke:var(--b5)}
+.ncb{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--b6),var(--b5));display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(100,90,255,.5),var(--n-shadow-sm);cursor:pointer;margin-top:-22px;flex-shrink:0;transition:transform .2s var(--ease),box-shadow .3s}
+.ncb:active{transform:scale(0.92)}
+.ncb:hover{box-shadow:0 8px 28px rgba(100,90,255,.6),var(--n-shadow-sm)}
+.ncb svg{width:22px;height:22px}
+
+/* ── Neumorphic Cards ── */
+.n-card{background:var(--bg);border-radius:var(--r-md);box-shadow:var(--n-shadow);transition:all .25s var(--ease);border:1px solid rgba(255,255,255,0.4)}
+.n-card:active{box-shadow:var(--n-shadow-in);transform:scale(0.98)}
+.n-card-flat{background:var(--bg);border-radius:var(--r-md);box-shadow:var(--n-shadow-sm);border:1px solid rgba(255,255,255,0.3)}
+
+/* ── Glass Cards ── */
+.glass{background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--glass-border);border-radius:var(--r-lg)}
+
+/* ── Buttons ── */
+.btn-primary{background:linear-gradient(135deg,var(--b4),var(--b6));color:#fff;border:none;border-radius:var(--r-md);padding:16px;font-size:15px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:.3px;box-shadow:0 4px 16px rgba(74,93,245,.35),var(--n-shadow-sm);transition:all .25s var(--ease);font-family:inherit}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(74,93,245,.45),var(--n-shadow-sm)}
+.btn-primary:active{transform:translateY(0);box-shadow:0 2px 8px rgba(74,93,245,.3)}
+.btn-outline{background:var(--bg);color:var(--b5);border:2px solid var(--b5);border-radius:var(--r-md);padding:14px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-outline:hover{background:var(--lightblue)}
+
+/* ── Inputs ── */
+.n-input{background:var(--bg);box-shadow:var(--n-shadow-in);border:none;border-radius:var(--r-sm);padding:14px 16px;font-size:14px;font-weight:600;color:var(--txt);font-family:inherit;width:100%;outline:none;transition:box-shadow .2s}
+.n-input:focus{box-shadow:var(--n-shadow-in),0 0 0 2px var(--b5)}
+.n-input::placeholder{color:var(--txt3);font-weight:500}
+
+/* ── Section Header ── */
+.sh{display:flex;justify-content:space-between;align-items:center;padding:0 20px 12px}
+.sh-title{font-size:16px;font-weight:800;color:var(--txt);font-family:'Clash Display',sans-serif}
+.sh-link{font-size:12px;font-weight:700;color:var(--b5);display:flex;align-items:center;gap:2px;cursor:pointer;transition:opacity .2s}
+.sh-link:hover{opacity:.7}
+
+/* ── Animations ── */
+@keyframes float {
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-8px)}
+}
+@keyframes pulse-glow {
+  0%,100%{box-shadow:0 0 0 0 rgba(74,93,245,.4)}
+  50%{box-shadow:0 0 20px 8px rgba(74,93,245,.15)}
+}
+@keyframes sparkle {
+  0%,100%{opacity:0;transform:scale(0) rotate(0deg)}
+  50%{opacity:1;transform:scale(1) rotate(180deg)}
+}
+@keyframes slideUp {
+  from{opacity:0;transform:translateY(30px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes fadeIn {
+  from{opacity:0}
+  to{opacity:1}
+}
+@keyframes shimmer {
+  0%{background-position:-200% 0}
+  100%{background-position:200% 0}
+}
+@keyframes spin-slow {
+  from{transform:rotate(0deg)}
+  to{transform:rotate(360deg)}
+}
+@keyframes bounce-in {
+  0%{transform:scale(0.3);opacity:0}
+  50%{transform:scale(1.05)}
+  70%{transform:scale(0.95)}
+  100%{transform:scale(1);opacity:1}
+}
+.animate-slideUp{animation:slideUp .5s var(--ease) forwards}
+.animate-fadeIn{animation:fadeIn .4s var(--ease) forwards}
+.animate-bounceIn{animation:bounce-in .6s var(--ease) forwards}
+.float{animation:float 3s ease-in-out infinite}
+.pulse-glow{animation:pulse-glow 2s ease-in-out infinite}
+
+/* ── Ambient Orbs ── */
+.orb{position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none;z-index:0;opacity:.5}
+.orb-1{width:200px;height:200px;background:linear-gradient(135deg,var(--b5),var(--b6));top:-60px;right:-40px}
+.orb-2{width:160px;height:160px;background:linear-gradient(135deg,var(--b6),var(--b7));bottom:10%;left:-50px;opacity:.3}
+.orb-3{width:120px;height:120px;background:linear-gradient(135deg,var(--green),var(--b5));top:40%;right:-30px;opacity:.25}
+
+/* ── Sparkle Elements ── */
+.sparkle{position:absolute;width:4px;height:4px;background:#fff;border-radius:50%;animation:sparkle 2s ease-in-out infinite}
+
+/* ── Scrollbar hide utility ── */
+.hide-scroll::-webkit-scrollbar{display:none}
+.hide-scroll{scrollbar-width:none}
+
+/* ── Utility ── */
+.text-gradient{background:linear-gradient(135deg,var(--b4),var(--b6));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.fw-800{font-weight:800}
+.fw-900{font-weight:900}
+.text-center{text-align:center}
+.w-full{width:100%}
+.mt-1{margin-top:4px}.mt-2{margin-top:8px}.mt-3{margin-top:12px}.mt-4{margin-top:16px}
+.mb-1{margin-bottom:4px}.mb-2{margin-bottom:8px}.mb-3{margin-bottom:12px}.mb-4{margin-bottom:16px}
+.px-4{padding-left:16px;padding-right:16px}
+.py-3{padding-top:12px;padding-bottom:12px}
+.gap-2{gap:8px}.gap-3{gap:12px}
+.flex{display:flex}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-between{justify-content:space-between}.justify-center{justify-content:center}
+.grid{display:grid}
+.relative{position:relative}.overflow-hidden{overflow:hidden}

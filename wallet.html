@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Wallet — BUMI Network</title>
+<link rel="stylesheet" href="design-system.css">
+<style>
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:8px 20px 14px}
+.tb-back{width:40px;height:40px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--n-shadow)}
+.tb-title{font-size:18px;font-weight:800;color:var(--txt);font-family:'Clash Display',sans-serif}
+.tb-icon{width:40px;height:40px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--n-shadow)}
+
+/* Balance Card */
+.wbal-card{margin:0 16px 20px;border-radius:var(--r-lg);background:linear-gradient(130deg,var(--b2) 0%,var(--b4) 50%,var(--b6) 100%);padding:22px 20px;position:relative;overflow:hidden;min-height:160px;box-shadow:0 16px 48px rgba(42,56,200,.3)}
+.wbal-card::before{content:'';position:absolute;top:-50px;right:-30px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.06)}
+.wbal-card::after{content:'';position:absolute;bottom:-60px;left:60px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.04)}
+.wbal-lbl{font-size:12px;color:rgba(255,255,255,.7);margin-bottom:6px;font-weight:500}
+.wbal-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;position:relative;z-index:1}
+.wbal-amt{font-size:30px;font-weight:900;color:#fff;font-family:'Clash Display',sans-serif}
+.wbal-eye{width:32px;height:32px;background:rgba(255,255,255,.15);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s}
+.wbal-eye:active{background:rgba(255,255,255,.25)}
+.wbal-sub{font-size:12px;color:rgba(255,255,255,.6);line-height:1.5;position:relative;z-index:1}
+.wbal-plus{position:absolute;right:20px;bottom:20px;width:38px;height:38px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;z-index:1}
+.wbal-plus:active{transform:scale(0.9)}
+
+/* Balance Breakdown Tabs */
+.bbtabs{display:flex;gap:8px;padding:0 16px 16px;overflow-x:auto;scrollbar-width:none}
+.bbtabs::-webkit-scrollbar{display:none}
+.bbtab{padding:10px 18px;border-radius:var(--r-full);font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;border:1.5px solid var(--border);color:var(--txt2);background:var(--bg);box-shadow:var(--n-shadow-sm);transition:all .2s;font-family:inherit}
+.bbtab.on{background:var(--b5);color:#fff;border-color:var(--b5);box-shadow:0 4px 12px rgba(74,93,245,.3)}
+
+.bb-content{display:none;padding:0 16px 20px}
+.bb-content.active{display:block}
+.bb-card{background:var(--bg);border-radius:var(--r-md);padding:16px;box-shadow:var(--n-shadow);border:1px solid rgba(255,255,255,.4)}
+.bb-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)}
+.bb-row:last-child{border-bottom:none}
+.bb-row .l{font-size:13px;color:var(--txt2);font-weight:600}
+.bb-row .r{font-size:13px;font-weight:800;color:var(--txt)}
+
+/* Chart placeholder */
+.chart-box{height:120px;background:linear-gradient(135deg,rgba(74,93,245,.1),rgba(124,92,252,.1));border-radius:var(--r-md);display:flex;align-items:flex-end;justify-content:center;gap:8px;padding:16px;margin-bottom:16px;box-shadow:var(--n-shadow-in)}
+.chart-bar{width:28px;border-radius:6px 6px 0 0;background:linear-gradient(180deg,var(--b5),var(--b6));transition:height .5s var(--ease)}
+
+/* Virtual Account */
+.va-card{margin:0 16px 20px;background:var(--bg);border-radius:var(--r-md);padding:16px;box-shadow:var(--n-shadow);border:1px solid rgba(255,255,255,.4)}
+.va-title{font-size:13px;font-weight:800;color:var(--txt);margin-bottom:10px;font-family:'Clash Display',sans-serif}
+.va-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
+.va-row:last-child{border-bottom:none}
+.va-bank{font-size:12px;color:var(--txt2);font-weight:600}
+.va-num{font-size:14px;font-weight:800;color:var(--txt);font-family:'Clash Display',sans-serif}
+.va-copy{background:var(--lightblue);color:var(--b5);border:none;padding:6px 12px;border-radius:var(--r-sm);font-size:11px;font-weight:700;cursor:pointer;box-shadow:var(--n-shadow-sm);transition:all .2s;font-family:inherit}
+.va-copy:active{box-shadow:var(--n-shadow-in)}
+
+/* Wallet Actions */
+.wacts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 16px 20px}
+.wact{display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer}
+.wact:active .wact-ic{box-shadow:var(--n-shadow-in);transform:scale(0.95)}
+.wact-ic{width:54px;height:54px;border-radius:16px;background:var(--bg);box-shadow:var(--n-shadow);display:flex;align-items:center;justify-content:center;transition:all .2s;border:1px solid rgba(255,255,255,.4)}
+.wact-ic svg{width:22px;height:22px;stroke:var(--b5);fill:none;stroke-width:2}
+.wact-lbl{font-size:11px;color:var(--txt);font-weight:700;text-align:center}
+
+/* Quick Amounts */
+.qamts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 16px 18px}
+.qamt{background:var(--bg);border:1.5px solid var(--border);border-radius:var(--r-sm);padding:12px 4px;text-align:center;font-size:13px;font-weight:700;color:var(--txt);cursor:pointer;transition:all .15s;box-shadow:var(--n-shadow-sm)}
+.qamt.sel,.qamt:hover{border-color:var(--b5);color:var(--b5);background:var(--lightblue);box-shadow:0 0 0 2px var(--b5),var(--n-shadow-sm)}
+
+.add-btn{margin:0 16px 22px}
+
+/* Transactions */
+.tx-list{padding:0 16px}
+.tx{display:flex;align-items:center;gap:13px;padding:14px 0;border-bottom:1px solid var(--border)}
+.tx:last-child{border-bottom:none}
+.tx-ic{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:var(--n-shadow-sm)}
+.tx-ic svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2}
+.tx-ic.cr{background:linear-gradient(135deg,var(--green),#16a34a)}
+.tx-ic.db{background:linear-gradient(135deg,var(--red),#dc2626)}
+.tx-ic.tr{background:linear-gradient(135deg,var(--b6),var(--b5))}
+.tx-info{flex:1}
+.tx-ttl{font-size:13px;font-weight:700;color:var(--txt)}
+.tx-dt{font-size:11px;color:var(--txt2);margin-top:2px}
+.tx-amt{font-size:14px;font-weight:900}
+.tx-amt.cr{color:var(--green)}
+.tx-amt.db{color:var(--red)}
+
+/* Referral Banner */
+.ref-banner{margin:0 16px 20px;background:linear-gradient(135deg,#fef3c7,#fde68a);border-radius:var(--r-md);padding:16px;box-shadow:var(--n-shadow);border:1px solid rgba(245,158,11,.2);display:flex;align-items:center;gap:14px}
+.ref-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--amber),#d97706);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ref-icon svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2}
+.ref-text{flex:1}
+.ref-title{font-size:13px;font-weight:800;color:var(--txt);font-family:'Clash Display',sans-serif}
+.ref-sub{font-size:11px;color:var(--txt2);margin-top:2px;font-weight:500}
+.ref-btn{background:var(--amber);color:#fff;border:none;padding:8px 14px;border-radius:var(--r-full);font-size:11px;font-weight:800;cursor:pointer;box-shadow:0 3px 10px rgba(245,158,11,.3);white-space:nowrap;transition:all .2s;font-family:inherit}
+.ref-btn:active{transform:scale(0.95)}
+</style>
+</head>
+<body>
+<div class="app-wrap">
+
+<div class="screen active">
+  <div class="sb">
+    <span class="sb-time">9:41</span>
+    <div class="sb-right">
+      <div class="bars"><b></b><b></b><b></b><b></b></div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111827" stroke-width="2"><path d="M1.42 9a16 16 0 0 1 21.16 0M5 12.55a11 11 0 0 1 14.08 0M10.54 16.1a6 6 0 0 1 2.92 0M12 20h.01"/></svg>
+      <svg width="24" height="13" viewBox="0 0 28 14"><rect x="1" y="1" width="22" height="12" rx="3" fill="none" stroke="#111827" stroke-width="1.5"/><rect x="3" y="3" width="16" height="8" rx="1.5" fill="#111827"/><path d="M24 4.5v5a2 2 0 0 0 0-5z" fill="#111827"/></svg>
+    </div>
+  </div>
+  <div class="sc">
+    <div class="topbar">
+      <div class="tb-back" onclick="location.href='home.html'"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111827" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></div>
+      <span class="tb-title">My Wallet</span>
+      <div class="tb-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111827" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+    </div>
+
+    <!-- Balance Card -->
+    <div class="wbal-card">
+      <div class="wbal-lbl">Total Balance</div>
+      <div class="wbal-row">
+        <span class="wbal-amt">₦5,250.00</span>
+        <button class="wbal-eye" onclick="toggleBal(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+      </div>
+      <div class="wbal-sub">Bonus: ₦350 • Referral: ₦100<br>Fund your wallet for seamless transactions.</div>
+      <div class="wbal-plus"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+    </div>
+
+    <!-- Balance Breakdown Tabs -->
+    <div class="bbtabs">
+      <div class="bbtab on" onclick="selBbtab(this,'overview')">Overview</div>
+      <div class="bbtab" onclick="selBbtab(this,'income')">Income</div>
+      <div class="bbtab" onclick="selBbtab(this,'expense')">Expense</div>
+    </div>
+
+    <div class="bb-content active" id="bb-overview">
+      <div class="bb-card">
+        <div class="bb-row"><span class="l">Main Balance</span><span class="r">₦4,800.00</span></div>
+        <div class="bb-row"><span class="l">Bonus Balance</span><span class="r" style="color:var(--green)">₦350.00</span></div>
+        <div class="bb-row"><span class="l">Referral Earnings</span><span class="r" style="color:var(--b5)">₦100.00</span></div>
+        <div class="bb-row"><span class="l">Total</span><span class="r" style="font-size:15px">₦5,250.00</span></div>
+      </div>
+    </div>
+    <div class="bb-content" id="bb-income">
+      <div class="bb-card">
+        <div class="chart-box">
+          <div class="chart-bar" style="height:40%"></div>
+          <div class="chart-bar" style="height:65%"></div>
+          <div class="chart-bar" style="height:45%"></div>
+          <div class="chart-bar" style="height:80%"></div>
+          <div class="chart-bar" style="height:55%"></div>
+          <div class="chart-bar" style="height:70%"></div>
+        </div>
+        <div class="bb-row"><span class="l">Wallet Top-ups</span><span class="r" style="color:var(--green)">+₦8,000</span></div>
+        <div class="bb-row"><span class="l">Cashback Earned</span><span class="r" style="color:var(--green)">+₦350</span></div>
+        <div class="bb-row"><span class="l">Referrals</span><span class="r" style="color:var(--green)">+₦100</span></div>
+      </div>
+    </div>
+    <div class="bb-content" id="bb-expense">
+      <div class="bb-card">
+        <div class="chart-box">
+          <div class="chart-bar" style="height:30%;background:linear-gradient(180deg,var(--red),#dc2626)"></div>
+          <div class="chart-bar" style="height:50%;background:linear-gradient(180deg,var(--red),#dc2626)"></div>
+          <div class="chart-bar" style="height:35%;background:linear-gradient(180deg,var(--red),#dc2626)"></div>
+          <div class="chart-bar" style="height:60%;background:linear-gradient(180deg,var(--red),#dc2626)"></div>
+          <div class="chart-bar" style="height:25%;background:linear-gradient(180deg,var(--red),#dc2626)"></div>
+          <div class="chart-bar" style="height:45%;background:linear-gradient(180deg,var(--red),#dc2626)"></div>
+        </div>
+        <div class="bb-row"><span class="l">Data Purchases</span><span class="r" style="color:var(--red)">-₦2,400</span></div>
+        <div class="bb-row"><span class="l">Airtime</span><span class="r" style="color:var(--red)">-₦1,500</span></div>
+        <div class="bb-row"><span class="l">Electricity</span><span class="r" style="color:var(--red)">-₦2,000</span></div>
+      </div>
+    </div>
+
+    <!-- Virtual Account -->
+    <div class="va-card">
+      <div class="va-title">Virtual Account Numbers</div>
+      <div class="va-row">
+        <div><div class="va-bank">Wema Bank</div><div class="va-num">1234567890</div></div>
+        <button class="va-copy" onclick="this.textContent='Copied!';setTimeout(()=>this.textContent='Copy',2000)">Copy</button>
+      </div>
+      <div class="va-row">
+        <div><div class="va-bank">Sterling Bank</div><div class="va-num">0987654321</div></div>
+        <button class="va-copy" onclick="this.textContent='Copied!';setTimeout(()=>this.textContent='Copy',2000)">Copy</button>
+      </div>
+    </div>
+
+    <!-- Wallet Actions -->
+    <div class="wacts">
+      <div class="wact">
+        <div class="wact-ic"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+        <span class="wact-lbl">Add Money</span>
+      </div>
+      <div class="wact">
+        <div class="wact-ic"><svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div>
+        <span class="wact-lbl">Transfer</span>
+      </div>
+      <div class="wact">
+        <div class="wact-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><polyline points="8 12 12 16 16 12"/></svg></div>
+        <span class="wact-lbl">Withdraw</span>
+      </div>
+      <div class="wact">
+        <div class="wact-ic"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+        <span class="wact-lbl">Promo Code</span>
+      </div>
+      <div class="wact">
+        <div class="wact-ic"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <span class="wact-lbl">Refer</span>
+      </div>
+    </div>
+
+    <!-- Quick Amounts -->
+    <div class="sh"><span class="sh-title">Quick Amount</span></div>
+    <div class="qamts">
+      <div class="qamt" onclick="selAmt(this)">₦200</div>
+      <div class="qamt" onclick="selAmt(this)">₦500</div>
+      <div class="qamt sel" onclick="selAmt(this)">₦1,000</div>
+      <div class="qamt" onclick="selAmt(this)">₦2,000</div>
+    </div>
+
+    <button class="btn-primary add-btn w-full">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add Money to Wallet
+    </button>
+
+    <!-- Referral Banner -->
+    <div class="ref-banner">
+      <div class="ref-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      <div class="ref-text">
+        <div class="ref-title">Refer & Earn</div>
+        <div class="ref-sub">₦100 per referral. Invite friends now!</div>
+      </div>
+      <button class="ref-btn" onclick="this.textContent='Copied!';setTimeout(()=>this.textContent='Copy Code',2000)">Copy Code</button>
+    </div>
+
+    <!-- Recent Transactions -->
+    <div class="sh"><span class="sh-title">Recent Transactions</span><span class="sh-link" onclick="location.href='history.html'">View All ▸</span></div>
+    <div class="tx-list">
+      <div class="tx">
+        <div class="tx-ic cr"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div>
+        <div class="tx-info"><div class="tx-ttl">Add Money</div><div class="tx-dt">May 22, 2024 • 10:30 AM</div></div>
+        <div class="tx-amt cr">+₦2,000</div>
+      </div>
+      <div class="tx">
+        <div class="tx-ic db"><svg viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></div>
+        <div class="tx-info"><div class="tx-ttl">Data Purchase</div><div class="tx-dt">May 21, 2024 • 09:15 PM</div></div>
+        <div class="tx-amt db">-₦1,000</div>
+      </div>
+      <div class="tx">
+        <div class="tx-ic tr"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+        <div class="tx-info"><div class="tx-ttl">Airtime Purchase</div><div class="tx-dt">May 21, 2024 • 04:45 PM</div></div>
+        <div class="tx-amt db">-₦500</div>
+      </div>
+      <div class="tx">
+        <div class="tx-ic cr"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div>
+        <div class="tx-info"><div class="tx-ttl">Add Money</div><div class="tx-dt">May 20, 2024 • 11:20 AM</div></div>
+        <div class="tx-amt cr">+₦1,000</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <div class="ni" onclick="location.href='home.html'"><svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><polyline points="9 21 9 12 15 12 15 21"/></svg><span class="ni-lbl">Home</span></div>
+    <div class="ni" onclick="location.href='buy-data.html'"><svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span class="ni-lbl">Buy Data</span></div>
+    <div class="ncb" onclick="location.href='wallet.html'"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg></div>
+    <div class="ni" onclick="location.href='history.html'"><svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><span class="ni-lbl">History</span></div>
+    <div class="ni" onclick="location.href='profile.html'"><svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="ni-lbl">Profile</span></div>
+  </div>
+</div>
+
+<script>
+function toggleBal(btn){
+  const amt=btn.previousElementSibling;
+  if(amt.dataset.hidden==='true'){amt.textContent='₦5,250.00';amt.dataset.hidden='false';btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';}
+  else{amt.textContent='₦••••••';amt.dataset.hidden='true';btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';}
+}
+function selBbtab(el,id){
+  el.closest('.bbtabs').querySelectorAll('.bbtab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  document.querySelectorAll('.bb-content').forEach(c=>c.classList.remove('active'));
+  document.getElementById('bb-'+id).classList.add('active');
+}
+function selAmt(el){
+  el.closest('.qamts').querySelectorAll('.qamt').forEach(a=>a.classList.remove('sel'));
+  el.classList.add('sel');
+}
+</script>
+</body>
+</html>

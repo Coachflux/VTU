@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Home — BUMI Network</title>
+<link rel="stylesheet" href="design-system.css">
+<style>
+/* ── Home Specific Styles ── */
+
+/* Topbar */
+.h-topbar{display:flex;justify-content:space-between;align-items:center;padding:8px 20px 14px}
+.hamburger{display:flex;flex-direction:column;gap:4px;cursor:pointer;padding:4px}
+.hamburger span{display:block;width:22px;height:2.5px;background:var(--txt);border-radius:2px}
+.hg{display:flex;align-items:center;gap:10px}
+.av{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;box-shadow:var(--n-shadow-sm)}
+.hg-sub{font-size:11px;color:var(--txt2);font-weight:600}
+.hg-name{font-size:15px;font-weight:800;color:var(--txt);font-family:'Clash Display',sans-serif}
+.nb-btn{width:42px;height:42px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;box-shadow:var(--n-shadow);position:relative;cursor:pointer;transition:all .2s}
+.nb-btn:active{box-shadow:var(--n-shadow-in)}
+.nb-dot{position:absolute;top:8px;right:9px;width:8px;height:8px;background:var(--red);border-radius:50%;border:2px solid var(--bg)}
+
+/* Hero / Wallet Balance Card */
+.hero{margin:0 16px 20px;border-radius:var(--r-lg);background:linear-gradient(130deg,var(--b2) 0%,var(--b4) 45%,var(--b5) 80%,var(--b6) 100%);padding:22px 18px;position:relative;overflow:hidden;min-height:180px;box-shadow:0 16px 48px rgba(42,56,200,.3)}
+.hero::before{content:'';position:absolute;top:-40px;right:-30px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.05)}
+.hero::after{content:'';position:absolute;bottom:-50px;left:50px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.03)}
+.hero-stars{position:absolute;inset:0;overflow:hidden}
+.star{position:absolute;width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.6);animation:sparkle 3s ease-in-out infinite}
+.hero-content{position:relative;z-index:2;max-width:210px}
+.badge-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:4px 10px;font-size:11px;font-weight:700;color:#fff;margin-bottom:12px;backdrop-filter:blur(8px)}
+.bolt{color:#fcd34d;font-size:13px}
+.hero-balance-lbl{font-size:11px;color:rgba(255,255,255,.65);font-weight:600;margin-bottom:4px}
+.hero-balance{font-size:32px;font-weight:900;color:#fff;line-height:1.1;font-family:'Clash Display',sans-serif}
+.hero-desc{font-size:12px;color:rgba(255,255,255,.55);margin-top:10px;line-height:1.5;font-weight:500}
+.hero-coins{position:absolute;right:16px;top:50%;transform:translateY(-55%);z-index:2}
+.coin{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;box-shadow:0 6px 20px rgba(0,0,0,.35)}
+.coin1{width:52px;height:52px;background:linear-gradient(135deg,#fbbf24,#d97706);left:0;top:0;font-size:18px}
+.coin2{width:38px;height:38px;background:linear-gradient(135deg,#fcd34d,#f59e0b);right:0;top:32px;font-size:14px}
+
+/* Cashback Badge */
+.cashback-badge{position:absolute;top:14px;right:14px;background:linear-gradient(135deg,var(--green),#16a34a);color:#fff;padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:800;box-shadow:0 4px 12px rgba(34,197,94,.4);z-index:3}
+
+/* Quick Wallet Pills */
+.qpills{display:flex;gap:10px;padding:0 16px 20px;overflow-x:auto;scrollbar-width:none}
+.qpills::-webkit-scrollbar{display:none}
+.qpill{flex-shrink:0;display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--bg);border-radius:var(--r-full);box-shadow:var(--n-shadow);border:1px solid rgba(255,255,255,.4);cursor:pointer;transition:all .2s}
+.qpill:active{box-shadow:var(--n-shadow-in)}
+.qpill svg{width:16px;height:16px;stroke:var(--b5);fill:none;stroke-width:2}
+.qpill span{font-size:12px;font-weight:700;color:var(--txt)}
+
+/* Promo Banner */
+.promo{margin:0 16px 22px;border-radius:var(--r-lg);background:linear-gradient(135deg,#1e2875,#4a5df5);padding:18px;position:relative;overflow:hidden;box-shadow:var(--n-shadow)}
+.promo::before{content:'';position:absolute;right:-20px;top:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.06)}
+.promo-content{position:relative;z-index:1;display:flex;align-items:center;gap:14px}
+.promo-img{width:56px;height:56px;border-radius:var(--r-md);background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.promo-img svg{width:28px;height:28px}
+.promo-text h3{font-size:15px;font-weight:800;color:#fff;font-family:'Clash Display',sans-serif}
+.promo-text p{font-size:12px;color:rgba(255,255,255,.65);margin-top:3px;font-weight:500}
+.promo-btn{margin-top:10px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;padding:6px 14px;border-radius:var(--r-full);font-size:11px;font-weight:700;cursor:pointer;backdrop-filter:blur(8px);transition:all .2s}
+.promo-btn:hover{background:rgba(255,255,255,.25)}
+
+/* Service Grid */
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 16px 22px}
+.svc-item{display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:14px 8px;border-radius:var(--r-md);background:var(--bg);box-shadow:var(--n-shadow);border:1px solid rgba(255,255,255,.4);transition:all .25s var(--ease)}
+.svc-item:active{box-shadow:var(--n-shadow-in);transform:scale(0.96)}
+.svc-item:hover{transform:translateY(-3px)}
+.svc-ic{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;box-shadow:var(--n-shadow-sm)}
+.svc-ic svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2}
+.svc-lbl{font-size:11px;font-weight:700;color:var(--txt);text-align:center}
+.svc-ic.buy-data{background:linear-gradient(135deg,var(--b5),var(--b6))}
+.svc-ic.buy-airtime{background:linear-gradient(135deg,var(--green),#16a34a)}
+.svc-ic.electricity{background:linear-gradient(135deg,var(--amber),#ea580c)}
+.svc-ic.betting{background:linear-gradient(135deg,var(--red),#dc2626)}
+.svc-ic.cable{background:linear-gradient(135deg,#8b5cf6,#7c3aed)}
+.svc-ic.wifi{background:linear-gradient(135deg,#06b6d4,#0891b2)}
+.svc-ic.education{background:linear-gradient(135deg,#f97316,#ea580c)}
+.svc-ic.giftcard{background:linear-gradient(135deg,#ec4899,#db2777)}
+.svc-ic.more{background:linear-gradient(135deg,var(--txt3),var(--txt2))}
+
+/* Monthly Stats */
+.stats-row{display:flex;gap:10px;padding:0 16px 22px}
+.stat-card{flex:1;padding:16px;border-radius:var(--r-md);background:var(--bg);box-shadow:var(--n-shadow);border:1px solid rgba(255,255,255,.4)}
+.stat-val{font-size:20px;font-weight:900;color:var(--txt);font-family:'Clash Display',sans-serif}
+.stat-lbl{font-size:11px;color:var(--txt2);margin-top:4px;font-weight:600}
+.stat-change{font-size:11px;font-weight:700;margin-top:6px;display:inline-flex;align-items:center;gap:3px}
+.stat-change.up{color:var(--green)}
+.stat-change.down{color:var(--red)}
+
+/* Daily Spin Card */
+.spin-card{margin:0 16px 22px;border-radius:var(--r-lg);background:linear-gradient(135deg,var(--b2),var(--b4));padding:18px;position:relative;overflow:hidden;box-shadow:0 12px 36px rgba(42,56,200,.25)}
+.spin-card::before{content:'';position:absolute;inset:0;background:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"><circle cx="30" cy="30" r="1" fill="rgba(255,255,255,.1)"/></svg>')}
+.spin-top{display:flex;align-items:center;gap:10px;position:relative;z-index:1}
+.spin-wheel{width:50px;height:50px;border-radius:50%;background:conic-gradient(var(--red) 0deg 60deg, var(--amber) 60deg 120deg, var(--green) 120deg 180deg, var(--b5) 180deg 240deg, var(--b6) 240deg 300deg, var(--red) 300deg 360deg);box-shadow:0 4px 16px rgba(0,0,0,.3),inset 0 0 0 4px rgba(255,255,255,.15);position:relative;animation:spin-slow 8s linear infinite;flex-shrink:0}
+.spin-wheel::after{content:'';position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:10px solid #fff;filter:drop-shadow(0 2px 2px rgba(0,0,0,.3))}
+.spin-title{font-size:15px;font-weight:800;color:#fff;font-family:'Clash Display',sans-serif}
+.spin-sub{font-size:12px;color:rgba(255,255,255,.6);margin-top:2px;font-weight:500}
+.spin-btn{margin-top:12px;background:linear-gradient(135deg,var(--amber),#ea580c);color:#fff;border:none;padding:10px 20px;border-radius:var(--r-full);font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 4px 16px rgba(245,158,11,.4);position:relative;z-index:1;transition:transform .2s}
+.spin-btn:active{transform:scale(0.95)}
+.leaderboard-mini{display:flex;gap:6px;margin-top:10px;position:relative;z-index:1}
+.lb-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--b6),var(--b5));display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#fff;border:2px solid rgba(255,255,255,.3)}
+
+/* Recent Activity */
+.ract{padding:0 16px}
+.ract-item{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--border)}
+.ract-item:last-child{border-bottom:none}
+.ract-ic{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:var(--n-shadow-sm)}
+.ract-ic svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2}
+.ract-info{flex:1}
+.ract-ttl{font-size:13px;font-weight:700;color:var(--txt)}
+.ract-dt{font-size:11px;color:var(--txt2);margin-top:2px}
+.ract-amt{font-size:14px;font-weight:900}
+.ract-amt.cr{color:var(--green)}
+.ract-amt.db{color:var(--red)}
+</style>
+</head>
+<body>
+<div class="app-wrap">
+
+<!-- ════════════════════════════════════════════
+     HOME SCREEN
+     ════════════════════════════════════════════ -->
+<div class="screen active" id="s-home">
+  <div class="sb">
+    <span class="sb-time">9:41</span>
+    <div class="sb-right">
+      <div class="bars"><b></b><b></b><b></b><b></b></div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111827" stroke-width="2"><path d="M1.42 9a16 16 0 0 1 21.16 0M5 12.55a11 11 0 0 1 14.08 0M10.54 16.1a6 6 0 0 1 2.92 0M12 20h.01"/></svg>
+      <svg width="24" height="13" viewBox="0 0 28 14"><rect x="1" y="1" width="22" height="12" rx="3" fill="none" stroke="#111827" stroke-width="1.5"/><rect x="3" y="3" width="16" height="8" rx="1.5" fill="#111827"/><path d="M24 4.5v5a2 2 0 0 0 0-5z" fill="#111827"/></svg>
+    </div>
+  </div>
+
+  <div class="sc">
+    <!-- Topbar -->
+    <div class="h-topbar">
+      <div class="hamburger"><span></span><span></span><span></span></div>
+      <div class="hg">
+        <div class="av">JD</div>
+        <div>
+          <div class="hg-sub">Good Morning,</div>
+          <div class="hg-name">John Doe</div>
+        </div>
+      </div>
+      <div class="nb-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <div class="nb-dot"></div>
+      </div>
+    </div>
+
+    <!-- Hero / Wallet Balance -->
+    <div class="hero">
+      <div class="hero-stars">
+        <div class="star" style="top:15%;left:8%;opacity:.8"></div>
+        <div class="star" style="top:60%;left:15%;opacity:.5;width:2px;height:2px;animation-delay:.5s"></div>
+        <div class="star" style="top:30%;left:30%;opacity:.6;animation-delay:1s"></div>
+        <div class="star" style="top:75%;left:35%;opacity:.4;width:2px;height:2px;animation-delay:1.5s"></div>
+        <div class="star" style="top:10%;left:48%;opacity:.7;animation-delay:2s"></div>
+      </div>
+      <div class="cashback-badge">💰 2% Cashback</div>
+      <div class="hero-content">
+        <div class="badge-pill"><span class="bolt">⚡</span> Instant Delivery</div>
+        <div class="hero-balance-lbl">Wallet Balance</div>
+        <div class="hero-balance">₦5,250.00</div>
+        <div class="hero-desc">Buy data, airtime & pay bills<br>in seconds.</div>
+      </div>
+      <div class="hero-coins">
+        <div class="coin coin1">₦</div>
+        <div class="coin coin2">₦</div>
+      </div>
+    </div>
+
+    <!-- Quick Pills -->
+    <div class="qpills">
+      <div class="qpill" onclick="location.href='wallet.html'">
+        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+        <span>Fund Wallet</span>
+      </div>
+      <div class="qpill" onclick="location.href='history.html'">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>History</span>
+      </div>
+      <div class="qpill">
+        <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span>Rewards</span>
+      </div>
+    </div>
+
+    <!-- Promo Banner -->
+    <div class="promo">
+      <div class="promo-content">
+        <div class="promo-img">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
+        <div class="promo-text">
+          <h3>⚡ Flash Sale!</h3>
+          <p>Get 20% extra data on all MTN plans today only.</p>
+          <button class="promo-btn">Claim Now →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Services Grid -->
+    <div class="sh"><span class="sh-title">Services</span><span class="sh-link">View All ▸</span></div>
+    <div class="svc-grid">
+      <div class="svc-item" onclick="location.href='buy-data.html'">
+        <div class="svc-ic buy-data"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+        <span class="svc-lbl">Buy Data</span>
+      </div>
+      <div class="svc-item" onclick="location.href='buy-airtime.html'">
+        <div class="svc-ic buy-airtime"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+        <span class="svc-lbl">Airtime</span>
+      </div>
+      <div class="svc-item" onclick="location.href='electricity.html'">
+        <div class="svc-ic electricity"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <span class="svc-lbl">Electricity</span>
+      </div>
+      <div class="svc-item" onclick="location.href='betting.html'">
+        <div class="svc-ic betting"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6v6l4 2"/></svg></div>
+        <span class="svc-lbl">Betting</span>
+      </div>
+      <div class="svc-item">
+        <div class="svc-ic cable"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="15" rx="2"/><line x1="2" y1="7" x2="22" y2="7"/><line x1="8" y1="22" x2="16" y2="22"/><line x1="12" y1="17" x2="12" y2="22"/></svg></div>
+        <span class="svc-lbl">Cable TV</span>
+      </div>
+      <div class="svc-item">
+        <div class="svc-ic wifi"><svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg></div>
+        <span class="svc-lbl">WiFi</span>
+      </div>
+      <div class="svc-item">
+        <div class="svc-ic education"><svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5z"/><path d="M6 12v5c0 1.66 2.69 3 6 3s6-1.34 6-3v-5"/></svg></div>
+        <span class="svc-lbl">Education</span>
+      </div>
+      <div class="svc-item">
+        <div class="svc-ic giftcard"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/></svg></div>
+        <span class="svc-lbl">Gift Cards</span>
+      </div>
+      <div class="svc-item">
+        <div class="svc-ic more"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></div>
+        <span class="svc-lbl">More</span>
+      </div>
+    </div>
+
+    <!-- Monthly Stats -->
+    <div class="sh"><span class="sh-title">This Month</span></div>
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-val">₦12.5k</div>
+        <div class="stat-lbl">Total Spent</div>
+        <div class="stat-change up">↑ 12%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">47</div>
+        <div class="stat-lbl">Transactions</div>
+        <div class="stat-change up">↑ 8%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">₦350</div>
+        <div class="stat-lbl">Cashback</div>
+        <div class="stat-change up">↑ 24%</div>
+      </div>
+    </div>
+
+    <!-- Daily Spin -->
+    <div class="spin-card">
+      <div class="spin-top">
+        <div class="spin-wheel"></div>
+        <div>
+          <div class="spin-title">🎰 Daily Spin</div>
+          <div class="spin-sub">Spin to win free data & airtime!</div>
+        </div>
+      </div>
+      <button class="spin-btn" onclick="this.textContent='Spinning...';setTimeout(()=>{this.textContent='🎉 You won ₦50!';this.style.background='var(--green)'},1500)">Spin Now</button>
+      <div class="leaderboard-mini">
+        <div class="lb-av">1</div>
+        <div class="lb-av">2</div>
+        <div class="lb-av">3</div>
+        <div class="lb-av">4</div>
+        <div class="lb-av">5</div>
+        <span style="font-size:10px;color:rgba(255,255,255,.5);margin-left:4px;font-weight:600">+247 spinning</span>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="sh"><span class="sh-title">Recent Activity</span><span class="sh-link" onclick="location.href='history.html'">View All ▸</span></div>
+    <div class="ract">
+      <div class="ract-item">
+        <div class="ract-ic" style="background:linear-gradient(135deg,var(--b5),var(--b6))"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div>
+        <div class="ract-info"><div class="ract-ttl">Wallet Top-up</div><div class="ract-dt">Today, 10:30 AM</div></div>
+        <div class="ract-amt cr">+₦2,000</div>
+      </div>
+      <div class="ract-item">
+        <div class="ract-ic" style="background:linear-gradient(135deg,var(--green),#16a34a)"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+        <div class="ract-info"><div class="ract-ttl">Data Purchase</div><div class="ract-dt">Today, 09:15 AM • MTN 2GB</div></div>
+        <div class="ract-amt db">-₦400</div>
+      </div>
+      <div class="ract-item">
+        <div class="ract-ic" style="background:linear-gradient(135deg,var(--red),#dc2626)"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+        <div class="ract-info"><div class="ract-ttl">Airtime Purchase</div><div class="ract-dt">Yesterday, 08:20 PM • Airtel</div></div>
+        <div class="ract-amt db">-₦500</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="nav">
+    <div class="ni on" onclick="location.href='home.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#4a5df5" stroke-width="2"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><polyline points="9 21 9 12 15 12 15 21"/></svg>
+      <span class="ni-lbl" style="color:#4a5df5">Home</span>
+    </div>
+    <div class="ni" onclick="location.href='buy-data.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span class="ni-lbl">Buy Data</span>
+    </div>
+    <div class="ncb" onclick="location.href='wallet.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+    </div>
+    <div class="ni" onclick="location.href='history.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span class="ni-lbl">History</span>
+    </div>
+    <div class="ni" onclick="location.href='profile.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span class="ni-lbl">Profile</span>
+    </div>
+  </div>
+</div>
+
+</div><!-- .app-wrap -->
+</body>
+</html>
